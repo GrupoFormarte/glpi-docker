@@ -43,15 +43,17 @@ RUN apt-get update && apt-get install -y libbz2-dev \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Iniciar el servicio de Cron
-RUN service cron start
-RUN service cron enable
+#RUN service cron start
+#RUN service cron enable
 
 # Copia los archivos de configuración
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY crontab /etc/cron.d/crontab
-
+# Agrega la tarea cron al final del Dockerfile
+RUN echo '* * * * * /usr/local/bin/php /var/www/html/front/cron.php &>/dev/null' > /etc/cron.d/crontab
+CMD cron -f & /usr/local/bin/php /var/www/html/front/cron.php & tail -f /dev/null
 # Dale permisos adecuados al archivo
-RUN chmod 0644 /etc/cron.d/crontabt
+RUN chmod 0644 /etc/cron.d/crontab
 
 # Copia el script de entrada del contenedor
 COPY docker-entrypoint.sh /docker-entrypoint.sh
