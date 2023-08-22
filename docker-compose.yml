@@ -1,0 +1,18 @@
+version: '3'
+services:
+  glpi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./html:/var/www/html
+      - ./etc:/etc/glpi
+      - ./var:/var/lib/glpi
+      - ./logs:/var/log/glpi
+    expose:
+      - '80'
+      - '587'
+    ports:
+      - "389:389"
+      - "636:636"
+      - "8081:80"  # Puedes modificar el puerto según tus necesidades
