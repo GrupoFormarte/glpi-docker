@@ -54,6 +54,7 @@ RUN echo '* * * * * /usr/local/bin/php /var/www/html/front/cron.php &>/dev/null'
 CMD cron -f & /usr/local/bin/php /var/www/html/front/cron.php & tail -f /dev/null
 # Dale permisos adecuados al archivo
 RUN chmod 0644 /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
 
 # Copia el script de entrada del contenedor
 COPY docker-entrypoint.sh /docker-entrypoint.sh
